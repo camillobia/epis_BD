@@ -20,7 +20,10 @@ Id_epis INT AUTO_INCREMENT PRIMARY KEY,
 Nome_epis VARCHAR(100),
 Categoria_epis VARCHAR(100),
 Qtd_epis VARCHAR(100),
-Data_Val DATE
+Data_Val DATE,
+Id_inspecao INT NOT NULL,
+FOREIGN KEY (Id_inspecao) 
+REFERENCES inspecao_epi (Id_inspecao)
 );
 CREATE TABLE Fornecedor (
 Id_fornecedor INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,3 +37,25 @@ Id_usuario INT AUTO_INCREMENT PRIMARY KEY,
 Email_usuario VARCHAR(100),
 Senha_usuario VARCHAR(100)
 );
+CREATE TABLE inspecao_epi (
+Id_inspecao INT AUTO_INCREMENT PRIMARY KEY,
+Data_inspecao DATE,
+Resultado_inspecao VARCHAR(20)
+);
+CREATE TABLE entrega(
+id_entrega      INT AUTO_INCREMENT PRIMARY KEY,
+id_funcionario  INT NOT NULL,
+id_epi          INT NOT NULL,
+id_estoque      INT,
+dt_entrega      DATE NOT NULL,
+dt_devolucao    DATE,--NULL = não devolvido
+assinatura      BOOLEAN DEFAULT FALSE,
+observacao      TEXT,
+FOREIGN KEY (id_funcionario)
+REFERENCES funcionario(id_funcionario),
+FOREIGN KEY (id_epi)
+REFERENCES epi(id_epi),
+FOREIGN KEY (id_estoque)
+REFERENCES estoque(id_estoque)
+);
+CREATE INDEX idx_epi_entrega ON epi(dt_entrega);
