@@ -19,9 +19,12 @@ CREATE TABLE EPIs (
 Id_epis INT AUTO_INCREMENT PRIMARY KEY,
 Nome_epis VARCHAR(100),
 Categoria_epis VARCHAR(100),
+CA_epis int,
 Qtd_epis VARCHAR(100),
+Qtd_entrega VARCHAR(100),
+Data_devolucao DATE,
 Data_Val DATE,
-Id_inspecao INT NOT NULL,
+Id_inspecao INT,
 FOREIGN KEY (Id_inspecao) 
 REFERENCES inspecao_epi (Id_inspecao)
 );
@@ -44,18 +47,22 @@ Resultado_inspecao VARCHAR(20)
 );
 CREATE TABLE entrega(
 id_entrega      INT AUTO_INCREMENT PRIMARY KEY,
-id_funcionario  INT NOT NULL,
+Id_funcionario  INT NOT NULL,
 id_epi          INT NOT NULL,
 id_estoque      INT,
 dt_entrega      DATE NOT NULL,
-dt_devolucao    DATE,--NULL = não devolvido
-assinatura      BOOLEAN DEFAULT FALSE,
+dt_devolucao    DATE,   
+assinatura      BOOLEAN DEFAULT FALSE NOT NULL,
 observacao      TEXT,
-FOREIGN KEY (id_funcionario)
-REFERENCES funcionario(id_funcionario),
-FOREIGN KEY (id_epi)
-REFERENCES epi(id_epi),
-FOREIGN KEY (id_estoque)
-REFERENCES estoque(id_estoque)
+FOREIGN KEY (Id_funcionario) 
+REFERENCES funcionario (Id_funcionario),
+FOREIGN KEY (id_epi) 
+REFERENCES EPIs (Id_epis)
+ON DELETE RESTRICT
 );
 CREATE INDEX idx_epi_entrega ON epi(dt_entrega);
+
+UPDATE EPIs 
+set Qtd_epi = Qtd_epi - Qtd_entrega
+where assinatura = TRUE 
+
